@@ -61,6 +61,19 @@ app.use(function(err, req, res, next) {
   });
 });
 
+// redis session
+app.use(session({
+    secret : 'keyboard cat',
+    resave : false,
+    savaUnitinialized : true,
+    store : new RedisStore({
+        host : conf.redisAddr(),
+        port : conf.redisPort(),
+        ttl : 60*60,
+        client : client
+    })
+}));
+
 // initialize route
 require('./routes/api').initApp(app);
 
