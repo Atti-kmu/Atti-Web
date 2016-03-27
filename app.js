@@ -4,9 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var conf = require('./conf.js');
+var redis = require('redis');
+var redisStore = require('connect-redis')(session);
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var log = require('./logger');
+var http = require('http');
+
+// redis client
+var client = redis.createClient();
+client.select(conf.redisSelect());
 
 var app = express();
 
@@ -21,9 +29,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,5 +61,13 @@ app.use(function(err, req, res, next) {
   });
 });
 
+// initialize route
+require('./routes/api').initApp(app);
+
+// Server configuration
+app.set('port', 8000);
+var server = http.createServer(app);
+server.listen(app.get('port'));
+log.info('Server Start!! Port is ' + app.get('port'));
 
 module.exports = app;

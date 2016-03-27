@@ -1,0 +1,3 @@
+exports.initApp = function(app){
+
+}
