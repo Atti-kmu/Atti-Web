@@ -12,7 +12,8 @@ exports.send = function (sender_id, sender_profile, clientKey) {
             sender_profile : sender_profile
         }
     });
-    var server_access_key = "AIzaSyBShibgEKow7Qqsen5XzbT0oyiI2J2Hnj8";
+    // GCM Server key
+    var server_access_key = "";
     var sender = new gcm.Sender(server_access_key);
 
     sender.send(message, clientKey, 10, function (err, result) {
