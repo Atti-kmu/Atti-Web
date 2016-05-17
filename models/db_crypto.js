@@ -3,7 +3,7 @@ var crypto = require('crypto');
 exports.do_ciper = function(inputpass)
 {
     // crypto salt
-    var salt = "jkjahdkghasdubeuiwbvuyuwieo";
+    var salt = "input any characters";
     // encryption iteration count
     var iterations = 30;
     // length of output
