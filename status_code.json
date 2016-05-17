@@ -1,0 +1,11 @@
+{
+  "0" : "success",
+  "1" : "Null parameter exists",
+  "2" : "Database internal error",
+  "100" : "Join error, duplicated id",
+  "101" : "Join error, check password validation",
+  "110" : "Login error, Login Required",
+  "111" : "Login error, Login fail",
+  "115" : "Mypage error, Profile upload fail",
+  "120" : "Call error, gcm push fail"
+}

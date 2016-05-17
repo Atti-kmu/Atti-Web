@@ -31,3 +31,13 @@ node_modules
 
 # Optional REPL history
 .node_repl_history
+
+# idea config file
+.idea
+
+# DB config
+conf.js
+
+db_crypto.js
+db_config.json
+sendPush.js
