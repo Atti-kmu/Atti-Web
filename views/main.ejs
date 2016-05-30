@@ -1,0 +1,61 @@
+<% include head %>
+
+<header class="top-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-5 header-logo">
+                <br>
+                <a href="/"><img src="../images/resource/logo.jpg" class="img-responsive logo"></a>
+                <img src="../images/resource/line.png" class="logo">
+            </div>
+
+            <div class="col-md-7">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid nav-bar">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a class="menu" href="/senior">독거 노인</a></li>
+                                <li><a class="menu" href="/project">독거 노인 친구 만들기 사업</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<br><br><br><br><br><br><br><br><br><br><br>
+
+<section class="about text-center" id="about">
+    <div class="container">
+        <div class="row">
+            <h3>내 정보</h3>
+            <div class="col-md-3 col-sm-5">
+                <div class="single-about-detail clearfix">
+                    <div class="about-img">
+                        <image src="../images/profile/<%=my_info[0].profile_name %>"></image>
+                    </div>
+
+                    <div class="about-details">
+                        <h3>사회복지사</h3>
+                        <p><%=my_info[0].id%><br>
+                        <%=my_info[0].name%><br>
+                        <%=my_info[0].phone%><br></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<% include foot %>

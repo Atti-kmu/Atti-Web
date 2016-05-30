@@ -1,9 +1,110 @@
 var easyimage = require('easyimage');
 
-var userModel = require('../../models/mobile/userModel');
-var db_crypto = require('../../models/db_crypto');
-var status_code = require('../../status_code');
+var userModel = require('../models/userModel');
+var db_crypto = require('../models/db_crypto');
+var status_code = require('../status_code');
 
+/***        WEB          ***/
+exports.main = function(req, res)
+{
+    userModel.getMyInfo(req.session.user_id, function(status, info){
+        if (!status){
+            return res.render('main', {title:'main', my_info:info[0][0]});
+        }
+        else{
+            return res.redirect('back');
+        }
+    });
+};
+
+exports.loginForm = function(req, res)
+{
+    if (req.session.user_id){
+        return res.redirect('/');
+    }
+    else {
+        return res.render('login', {title: 'Login'});
+    }
+};
+
+exports.joinForm = function(req, res)
+{
+    return res.render('join', {title: 'Join'});
+};
+
+exports.loginWeb = function(req, res)
+{
+    // parameter check
+    if (!req.body.user_id || !req.body.password){
+        return res.redirect('back');
+    }
+    else{
+        var user_data = [
+            req.body.user_id, db_crypto.do_ciper(req.body.password)
+        ];
+        userModel.login(user_data, function(status){
+            if (!status){
+                req.session.user_id = req.body.user_id;
+                return res.redirect('/');
+            }
+            else{
+                return res.redirect('back');
+            }
+        });
+    }
+};
+
+exports.joinWeb = function(req, res)
+{
+    var phone = req.body.tel1 + '-' + req.body.tel2 + '-' + req.body.tel3;
+    // parameter check
+    if (!req.body.user_id || !req.body.password || !req.body.name || !req.body.gender || !req.body.kind ){
+        return res.redirect('back');
+    }
+    // password checker
+    else if(!validatePassword(req.body.password)){
+        return res.redirect('back');
+    }
+    else{
+        var user_data = [
+            req.body.user_id, db_crypto.do_ciper(req.body.password),
+            req.body.name,req.body.gender,
+            req.body.kind, phone,
+            req.body.push_id, req.body.description,
+            req.body.address
+        ];
+        console.log(user_data);
+        userModel.join(user_data, function(status){
+            console.log(status);
+            if (!status){
+                return res.redirect('/user/login');
+            }
+            else{
+                return res.redirect('back');
+            }
+
+        });
+    }
+};
+
+exports.isLoginWeb = function(req, res, next)
+{
+    if (req.session.user_id)    {
+        next();
+    }
+    else{
+        return res.redirect('/user/login');
+    }
+};
+
+exports.logoutWeb = function(req, res)
+{
+    req.session.destroy();
+
+    return res.redirect('/user/login');
+};
+
+/***        MOBILE          ***/
 exports.join = function(req, res)
 {
     // parameter check
@@ -40,7 +141,7 @@ exports.join = function(req, res)
 exports.login = function(req, res)
 {
     // parameter check
-    if (!req.body.id || !req.body.password){
+    if (!req.body.id || !req.body.password || !req.body.push_id){
         return res.json({
             "status" : 1,
             "message" : status_code[1]
@@ -48,7 +149,8 @@ exports.login = function(req, res)
     }
     else{
         var user_data = [
-            req.body.id, db_crypto.do_ciper(req.body.password)
+            req.body.id, db_crypto.do_ciper(req.body.password),
+            req.body.push_id
         ];
         userModel.login(user_data, function(status){
             if (!status){
@@ -91,7 +193,8 @@ exports.getMyInfo = function(req, res)
         return res.json({
            "status" : status,
             "message" : status_code[status],
-            "my_info" : info
+            "my_info" : info[0][0],
+            'socialworker_info' : info[1][0]
         });
     });
 };

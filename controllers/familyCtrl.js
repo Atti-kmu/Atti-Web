@@ -1,6 +1,7 @@
-var familyModel = require('../../models/mobile/familyModel');
-var status_code = require('../../status_code');
+var familyModel = require('../models/familyModel');
+var status_code = require('../status_code');
 
+/***        MOBILE          ***/
 exports.getList = function(req, res){
     var datas = [req.session.user_id, req.params.page_num];
     familyModel.getList(datas, function(status, familyList){

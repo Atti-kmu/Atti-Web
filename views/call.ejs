@@ -1,0 +1,58 @@
+<% include head %>
+
+<body>
+<div class="container">
+    <button class="btn btn-default" id="통화">
+        <span class="glyphicon glyphicon-phone-alt" aria-hidden="createChannel"></span> 통화
+    </button>
+    <a href="/">
+    <button class="btn btn-default" id="통화 종료">
+        <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> 통화 종료
+    </button>
+    </a>
+    <div class="row">
+
+        <div class="col-md-12">
+            <h2 class="h3">사회복지사</h2>
+            <form class="form-inline">
+                <div class="form-group">
+                    <input type="text" id="createChannelId" value="">
+                </div>
+            </form>
+
+            <video class="remote-video center-block" id="callerRemoteVideo"></video>
+            <video class="local-video pull-right" id="callerLocalVideo"></video>
+
+        </div>
+    </div>
+</div>
+
+<script src="../javascripts/playrtc.min.js"></script>
+<script>
+    'use strict';
+    var createChannelIdInput = document.querySelector('#createChannelId');
+
+    var appCaller;
+    appCaller = new PlayRTC({
+        projectKey: '9f081460-6001-4dfc-a4cd-60282bbcd701',
+        localMediaTarget: 'callerLocalVideo',
+        remoteMediaTarget: 'callerRemoteVideo'
+    });
+    appCaller.on('connectChannel', function(channelId) {
+        createChannelIdInput.value = channelId;
+        $(function(){
+            $.post("/mobile/call", {"receiver": "<%= receiver %>", "channel":channelId});
+        })
+    });
+    appCaller.on('disconnectChannel', function(channelId) {
+        location.href='/senior';
+    });
+    appCaller.on('otherDisconnectChannel', function(channelId) {
+        location.href='/senior';
+    });
+
+
+    appCaller.createChannel();
+
+</script>
+<% include foot %>

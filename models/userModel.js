@@ -1,5 +1,5 @@
 var mysql = require('mysql');
-var db_config = require('../db_config');
+var db_config = require('./db_config');
 var pool = mysql.createPool(db_config);
 var async = require('async');
 
@@ -53,18 +53,31 @@ exports.login = function(user_data, done){
             done(2);
         }
         else {
-            var sql = "SELECT count(*) as cnt FROM USER WHERE id=? and password=?";
-            conn.query(sql, user_data, function(err, rows){
+            async.waterfall([
+                function(callback){
+                    var sql = "UPDATE USER SET push_id=? WHERE id=?";
+                    conn.query(sql, [user_data[2], user_data[0]], callback);
+                },
+                function(rows, field, callback){
+                    if (rows.affectedRows){
+                        var sql = "SELECT count(*) as cnt FROM USER WHERE id=? and password=?";
+                        conn.query(sql, [user_data[0], user_data[1]], callback);
+                    }
+                    else{
+                        callback(null, null)
+                    }
+                }
+            ],function(err, rows, fields){
                 conn.release();
                 if (err){
                     console.error("mobile userModel error ", err);
                     done(2);
                 }
-                else if (!rows[0].cnt) {
-                    done(111);
+                else if (rows[0].cnt) {
+                    done(0);
                 }
                 else{
-                    done(0);
+                    done(111);
                 }
             });
         }
@@ -79,21 +92,30 @@ exports.getMyInfo = function(user_id, done){
             done(2);
         }
         else{
-            var sql = "SELECT id, profile_name, name, gender, kind, phone, address FROM USER WHERE id=?";
-            conn.query(sql, user_id, function(err, rows){
-                conn.release();
-                if (err){
-                    console.error("mobile userModel error ", err);
-                    done(2);
-                }
-                else if (rows.length){
-                    done(0, rows);
-                }
-                else{
-                    done(2, null);
-                }
-            });
-       }
+            async.parallel([
+                    function(callback){
+                        var sql = "SELECT id, profile_name, name, gender, kind, phone, address FROM USER WHERE id=?";
+                        conn.query(sql, user_id, callback);
+                    },
+                    function(callback){
+                        var sql = "SELECT id, profile_name, name, gender, kind, phone, address FROM USER INNER JOIN (SELECT id_from FROM SOCIALWORKER WHERE id_to=?) sw ON USER.id = sw.id_from";
+                        conn.query(sql, user_id, callback);
+                    }
+                ],
+                function(err, rows){
+                    conn.release();
+                    if (err){
+                        console.error("mobile userModel error ", err);
+                        done(2, null);
+                    }
+                    else if (rows.length){
+                        done(0, rows);
+                    }
+                    else{
+                        done(2, null);
+                    }
+                });
+        }
     });
 };
 
@@ -123,7 +145,6 @@ exports.uploadProfile = function(user_data, done){
     });
 };
 
-// push_id, id, profile_name, name
 exports.getCallInfo = function(user_data, done){
     var sender = user_data[0];
     var receiver = user_data[1];

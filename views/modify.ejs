@@ -1,0 +1,29 @@
+<% include head %>
+<a href="/"><img src="../images/resource/logo.jpg" class="img-responsive logo" id="logo"></a>
+
+<div class="login-page">
+    <div class="form">
+
+        <div id="login_title">
+            <h3>로그인</h3>
+        </div>
+
+        <form class="register-form" method="post" action="/user/login">
+            <input type="text" id="user_id" name="user_id" placeholder="아이디">
+            <input type="password" id="password" name="password" placeholder="비밀번호">
+            <div class="login_submit">
+                <input type="submit" id="login_button" value="로그인">
+                <input type="button" id="join_button" name="join_button" onclick="join_click()" value="회원가입"/>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    function join_click() {
+        location.href = "/user/join";
+    }
+</script>
+
+<% include foot %>

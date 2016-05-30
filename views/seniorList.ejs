@@ -1,0 +1,69 @@
+<% include head %>
+
+<header class="top-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-5 header-logo">
+                <br>
+                <a href="/"><img src="../images/resource/logo.jpg" class="img-responsive logo"></a>
+                <img src="../images/resource/line.png">
+            </div>
+
+            <div class="col-md-7">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid nav-bar">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a class="menu active" href="/senior" >독거 노인</a></li>
+                                <li><a class="menu" href="/project">독거 노인 친구 만들기 사업</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<br><br><br><br><br><br><br><br><br><br><br>
+
+<section class="about text-center" id="about">
+    <div class="container">
+        <div class="row">
+            <h3>독거 노인 리스트</h3>
+            <input type="button" id="senior_add_button" name="senior_add_button" onclick="senior_add_click()" value="독거노인 추가"/>
+            <br><br><br>
+            <% for (var i=0; i<list.length; ++i){ %>
+            <!--<a href="/call">-->
+                <div class="col-md-4 col-sm-6">
+                    <div class="single-about-detail clearfix">
+                        <div class="about-img">
+                            <image src="../images/profile/<%=list[i].profile_name %>" width="150" height="250"></image>
+                        </div>
+
+                        <div class="about-details">
+                            <br><br>
+                            <h3><%=list[i].name%></h3>
+                            <br>
+                            <!--<h3><%=list[i].phone%></h3>-->
+                            <!--<p><%=list[i].description%></p>-->
+                            <a href="/call/<%=list[i].id%>"><input type="button" id="call_button" name="call_button" value="통화"></a>
+                            <a href="/senior/<%=list[i].id%>"><input type="button" id="modify_button" name="modify_button" value="삭제"></a>
+                        </div>
+                        <br><br>
+                    </div>
+                </div>
+            <!--</a>-->
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<script>
+    function senior_add_click() {
+        location.href = "/senior/add";
+    }
+</script>
+
+<% include foot %>

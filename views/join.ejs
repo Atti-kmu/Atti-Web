@@ -1,0 +1,54 @@
+<% include head %>
+<img src="../images/resource/logo.jpg">
+<div class="form-page">
+    <div class="form">
+
+        <div id="login_title">
+            <h3>회원가입</h3>
+        </div>
+
+        <div class="join_body">
+            <form method="post" action="/user/join">
+                <label>아이디:</label>
+                <input type="text" id="user_id" name="user_id">
+
+                <label>비밀번호:</label>
+                <input type="text" id="password" name="password">
+
+                <label>이름:</label>
+                <input type="text" id="name" name="name">
+
+                <label>성별:</label><br><br><br>
+                <div class="join_component">
+                    <input type="radio" class="gender" name="gender" value="0" required>남&nbsp&nbsp
+                    <input type="radio" class="gender" name="gender" value="1" required>여
+                </div>
+                <input type="hidden" id="kind" name="kind" value="2"/>
+
+                <label>전화번호:</label><br><br>
+                <select id="tel1" name="tel1">
+                    <option selected>010</option>
+                    <option>011</option>
+                    <option>016</option>
+                    <option>017</option>
+                    <option>019</option>
+                </select>
+                &nbsp&nbsp<input id="tel2" name="tel2" type="text" minlength="3" maxlength="4" size="4" required/>
+                &nbsp&nbsp<input id="tel3" name="tel3" type="text" minlength="4" maxlength="4" size="4" required/>
+
+                <br><br>
+                <div class="login_submit">
+                    <input type="submit" value="Join">
+                    <input type="button" id="back" name="back" onclick="back_click()" value="back"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function back_click() {
+        location.href = "/";
+    }
+</script>
+
+<% include foot %>
